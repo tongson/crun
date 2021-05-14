@@ -293,6 +293,9 @@ libcrun_generate_seccomp (libcrun_container_t *container, int outfd, unsigned in
   ctx = seccomp_init (default_action);
   if (ctx == NULL)
     return crun_make_error (err, 0, "error seccomp_init");
+  ret = seccomp_attr_set(ctx, SCMP_FLTATR_CTL_OPTIMIZE, 2);
+  if (ret < 0)
+    return crun_make_error (err, -ret, "seccomp rule optimization");
 
   for (i = 0; i < seccomp->architectures_len; i++)
     {
